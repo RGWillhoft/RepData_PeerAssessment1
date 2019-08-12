@@ -7,32 +7,56 @@ output:
     keep_md: true
 ---
 
-```{r setup, include=FALSE}
-# Make it so I don't have to put echo=TRUE on each chunk
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 
 
 ## Loading and preprocessing the data
 
 1. Load the data (`read.csv()`
 
-```{r load}
+
+```r
 unzip("activity.zip")
 step_data <- read.csv("activity.csv", stringsAsFactors = FALSE)
 str(step_data)
 ```
 
+```
+## 'data.frame':	17568 obs. of  3 variables:
+##  $ steps   : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ date    : chr  "2012-10-01" "2012-10-01" "2012-10-01" "2012-10-01" ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
+```
+
 2. Process/transform the data (if necessary) into a format suitable for your analysis
 
-```{r preprocess}
+
+```r
 step_data$date <- as.Date(step_data$date, "%Y-%m-%d")
 range(step_data$date)
 ```
 
-```{r explore}
+```
+## [1] "2012-10-01" "2012-11-30"
+```
+
+
+```r
 summary(step_data$steps)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##    0.00    0.00    0.00   37.38   12.00  806.00    2304
+```
+
+```r
 summary(step_data$interval)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##     0.0   588.8  1177.5  1177.5  1766.2  2355.0
 ```
 
 ## What is mean total number of steps taken per day?
@@ -41,43 +65,62 @@ For this part of the assignment, you can ignore the missing values in the datase
 
 1. Calculate the total number of steps taken per day
 
-```{r total_steps}
+
+```r
 steps_per_day <- with(step_data, tapply(steps, date, sum, na.rm = TRUE))
 str(steps_per_day)
 ```
 
+```
+##  int [1:61(1d)] 0 126 11352 12116 13294 15420 11015 0 12811 9900 ...
+##  - attr(*, "dimnames")=List of 1
+##   ..$ : chr [1:61] "2012-10-01" "2012-10-02" "2012-10-03" "2012-10-04" ...
+```
+
 2. If you do not understand the difference between a histogram and a barplot, research the difference between them. Make a histogram of the total number of steps taken each day
 
-```{r hist}
+
+```r
 hist(steps_per_day,
      xlab = "Steps per Day",
      main = "Histogram of Total Steps per Day"
 )
 ```
 
+![](PA1_template_files/figure-html/hist-1.png)<!-- -->
+
 3. Calculate and report the mean and median of the total number of steps taken per day
 
-```{r mean_median}
+
+```r
 mean_steps_per_day <- mean(steps_per_day)
 median_steps_per_day <- median(steps_per_day)
 ```
 
-The mean (average) number of steps per day is `r round(mean_steps_per_day)` 
-and the median is `r median_steps_per_day` steps.
+The mean (average) number of steps per day is 9354 
+and the median is 10395 steps.
 
 
 ## What is the average daily activity pattern?
 
 1. Make a time series plot (i.e. \color{red}{\verb|type = "l"|}type="l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
-```{r daily_activity}
+
+```r
 steps_per_interval <- with(step_data, tapply(steps, interval, mean, na.rm = TRUE))
 str(steps_per_interval)
 ```
 
+```
+##  num [1:288(1d)] 1.717 0.3396 0.1321 0.1509 0.0755 ...
+##  - attr(*, "dimnames")=List of 1
+##   ..$ : chr [1:288] "0" "5" "10" "15" ...
+```
+
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
-```{r plot}
+
+```r
 plot(x = names(steps_per_interval),
      y = steps_per_interval,
      xlab = "Interval",
@@ -85,6 +128,8 @@ plot(x = names(steps_per_interval),
      type = "l"
 )
 ```
+
+![](PA1_template_files/figure-html/plot-1.png)<!-- -->
 
 ## Imputing missing values
 
