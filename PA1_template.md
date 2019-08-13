@@ -133,20 +133,170 @@ plot(x = names(steps_per_interval),
 
 ## Imputing missing values
 
-Note that there are a number of days/intervals where there are missing values (coded as \color{red}{\verb|NA|}NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
+Note that there are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
 
 1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with \color{red}{\verb|NA|}NAs)
 
+
+```r
+na_values = sum(is.na(step_data$steps))
+na_values
+```
+
+```
+## [1] 2304
+```
+
+```r
+na_percent = 100 * na_values / nrow(step_data)
+na_percent
+```
+
+```
+## [1] 13.11475
+```
+
 2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+
+<!-- Note you can remove head from these to see all the data --->
+
+
+```r
+all(table(step_data$interval) == 61)
+```
+
+```
+## [1] TRUE
+```
+
+```r
+all(table(step_data$interval[is.na(step_data$steps)]) == 8)
+```
+
+```
+## [1] TRUE
+```
+
+
+```r
+all(table(step_data$date) == 288)
+```
+
+```
+## [1] TRUE
+```
+
+```r
+table(step_data$date[is.na(step_data$steps)])
+```
+
+```
+## 
+## 2012-10-01 2012-10-08 2012-11-01 2012-11-04 2012-11-09 2012-11-10 
+##        288        288        288        288        288        288 
+## 2012-11-14 2012-11-30 
+##        288        288
+```
 
 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
 
+
+```r
+step_data_imputed <- step_data
+bad <- is.na(step_data$steps)
+interval_index <- match(step_data$interval[bad],names(steps_per_interval))
+step_data_imputed$steps[bad] <- steps_per_interval[interval_index] 
+```
+
+
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+
+
+
+```r
+steps_per_day_imputed <- with(step_data_imputed, tapply(steps, date, sum, na.rm = TRUE))
+par(mfrow = c(1,2))
+hist(steps_per_day,
+     xlab = "Steps per Day",
+     main = "Histogram of Total Steps per Day"
+)
+hist(steps_per_day_imputed,
+     xlab = "Steps per Day",
+     main = "Histogram of Total Steps per Day"
+)
+```
+
+![](PA1_template_files/figure-html/total_steps_imputed-1.png)<!-- -->
+
+
+```r
+steps_per_interval_imputed <- with(step_data_imputed, tapply(steps, interval, mean, na.rm = TRUE))
+plot(x = names(steps_per_interval),
+     y = steps_per_interval,
+     xlab = "Interval",
+     main = "Average Steps by 5 Minute Interval",
+     type = "l",
+     col = "blue"
+)
+lines(x = names(steps_per_interval_imputed),
+     y = steps_per_interval,
+     col = "red"
+)
+```
+
+![](PA1_template_files/figure-html/per_interval_imputed-1.png)<!-- -->
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-For this part the \color{red}{\verb|weekdays()|}weekdays() function may be of some help here. Use the dataset with the filled-in missing values for this part.
+For this part the weekdays() function may be of some help here. Use the dataset with the filled-in missing values for this part.
 
 1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
 
+
+```r
+weekend <- weekdays(step_data_imputed$date) %in% c("Saturday", "Sunday")
+step_data_imputed$weekday <- factor( weekdays(step_data$date) %in% c("Saturday", "Sunday") )
+levels(step_data_imputed$weekday) <- c("weekday", "weekend")
+```
+
+
 2. Make a panel plot containing a time series plot (i.e. \color{red}{\verb|type = "l"|}type="l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
+
+
+```r
+library(dplyr)
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
+steps_by_weekday <- step_data_imputed %>%
+                    group_by(interval,weekday) %>%
+                    summarize(steps = mean(steps)
+)
+
+library(lattice)
+xyplot(steps ~ interval | weekday, 
+       data = steps_by_weekday, 
+       layout = c(1,2),
+       type = "l"
+)
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
