@@ -419,7 +419,7 @@ str(step_data)</code></pre>
 <p>This part of the assignment ignores the missing values (<strong>NA</strong>s) in the dataset.</p>
 <div id="calculation-of-the-total-number-of-steps-taken-per-day" class="section level3">
 <h3>1. Calculation of the total number of steps taken per day</h3>
-<p>Note: this is just a little easier using the <code>with</code> function since it elimates having to use the <code>step_data$</code> in front of each variable name.</p>
+<p>Note: this is just a little easier using the <code>with</code> function since it eliminates having to use the <code>step_data$</code> in front of each variable name.</p>
 <pre class="r"><code>steps_per_day &lt;- with(step_data, tapply(steps, date, sum, na.rm = TRUE))
 summary(steps_per_day)</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
@@ -450,7 +450,7 @@ median_steps_per_day &lt;- median(steps_per_day)</code></pre>
 <div id="time-series-plot-of-steps-vs.-interval" class="section level3">
 <h3>1. Time series plot of <strong>steps</strong> vs. <strong>interval</strong></h3>
 <p>This is a time series plot of the 5-minute interval and the average number of steps taken, averaged across all days.</p>
-<p>First we need to calcualte the mean of the steps across all the days in the dataset.</p>
+<p>First we need to calculate the mean of the steps across all the days in the dataset.</p>
 <pre class="r"><code>steps_per_interval &lt;- with(step_data, tapply(steps, interval, mean, na.rm = TRUE))
 str(steps_per_interval)</code></pre>
 <pre><code>##  num [1:288(1d)] 1.717 0.3396 0.1321 0.1509 0.0755 ...
@@ -508,8 +508,8 @@ bad &lt;- is.na(step_data$steps)
 interval_index &lt;- match(step_data$interval[bad],names(steps_per_interval))
 step_data_imputed$steps[bad] &lt;- steps_per_interval[interval_index]</code></pre>
 </div>
-<div id="comparision-with-the-original-data" class="section level3">
-<h3>4. Comparision with the original data</h3>
+<div id="comparison-with-the-original-data" class="section level3">
+<h3>4. Comparison with the original data</h3>
 <div id="total-steps-by-day" class="section level4">
 <h4>Total steps by day</h4>
 <p>Here is a comparison between the histograms of the original data and the imputed data. We see a significant drop of the lowest bar, since the sum of the <strong>NA</strong>’s (when using <code>rm.na = TRUE</code>) is zero if all the values are <strong>NA</strong>. The middle bar is higher since this is the bar that contains the total of the means by interval (10766).</p>

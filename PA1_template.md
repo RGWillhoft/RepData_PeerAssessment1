@@ -80,7 +80,7 @@ This part of the assignment ignores the missing values (**NA**s) in the dataset.
 
 ### 1. Calculation of the total number of steps taken per day
 
-Note: this is just a little easier using the `with` function since it elimates having to use the `step_data$` in front of each variable name.
+Note: this is just a little easier using the `with` function since it eliminates having to use the `step_data$` in front of each variable name.
 
 
 ```r
@@ -126,7 +126,7 @@ and the median is 10395 steps.
 ### 1. Time series plot of **steps** vs. **interval** 
 This is a time series plot of the 5-minute interval and the average number of steps taken, averaged across all days.
 
-First we need to calcualte the mean of the steps across all the days in the dataset.
+First we need to calculate the mean of the steps across all the days in the dataset.
 
 
 ```r
@@ -240,7 +240,7 @@ interval_index <- match(step_data$interval[bad],names(steps_per_interval))
 step_data_imputed$steps[bad] <- steps_per_interval[interval_index]
 ```
 
-### 4. Comparision with the original data
+### 4. Comparison with the original data
 
 #### Total steps by day
 
