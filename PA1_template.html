@@ -528,21 +528,12 @@ levels(step_data_imputed$weekday) &lt;- c(&quot;weekday&quot;, &quot;weekend&quo
 <ol start="2" style="list-style-type: decimal">
 <li>Make a panel plot containing a time series plot (i.e. type=“l”) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.</li>
 </ol>
-<pre class="r"><code>library(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>steps_by_weekday &lt;- step_data_imputed %&gt;%
+<pre class="r"><code>library(dplyr)
+steps_by_weekday &lt;- step_data_imputed %&gt;%
                     group_by(interval,weekday) %&gt;%
                     summarize(steps = mean(steps)
-)
-
-library(lattice)
+)</code></pre>
+<pre class="r"><code>library(lattice)
 xyplot(steps ~ interval | weekday, 
        data = steps_by_weekday, 
        layout = c(1,2),

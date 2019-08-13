@@ -265,31 +265,14 @@ levels(step_data_imputed$weekday) <- c("weekday", "weekend")
 
 ```r
 library(dplyr)
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-```
-
-```
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-```r
 steps_by_weekday <- step_data_imputed %>%
                     group_by(interval,weekday) %>%
                     summarize(steps = mean(steps)
 )
+```
 
+
+```r
 library(lattice)
 xyplot(steps ~ interval | weekday, 
        data = steps_by_weekday, 
@@ -298,5 +281,5 @@ xyplot(steps ~ interval | weekday,
 )
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+![](PA1_template_files/figure-html/plot_weekday-1.png)<!-- -->
 
